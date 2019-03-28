@@ -1,4 +1,2 @@
 .idea
 node_modules
-dnsmasq/config
-dnsmasq/dnsmasq.conf
