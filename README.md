@@ -30,15 +30,20 @@ This is the node app to run the drone boat.
 - ESP8266 NodeMcu
 - BTS7960 (2x motor driver)
 - PCA9685 (pwm)
-
-### Sensors
-- ESP8266 NodeMcu
 - GY-GPS6MV2 (gps)
 - GY-273 (gyro)
+
+### Sensors (air)
+- ESP8266 NodeMcu
 - nova PM sensor SDS001 V2-008 (dust)
 - ADC121C + MQ131 (gas)
 - ADC121C + MQ135 (gas)
 - MPL115A2 (bar.pressure)
+
+### Sensors (water)
+- ESP8266 NodeMcu
+- Nitrate / Nitrite 
+- Ammonium
 
 ### Camera Dolly
 - ESP8266 NodeMCU
