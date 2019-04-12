@@ -1,0 +1,82 @@
+# Setting up the Raspberry Pi
+
+Use a Raspberry Pi 3 b and the [Raspbian lite image](https://www.raspberrypi.org/downloads/raspbian/)
+
+- change the password
+```
+passwd
+```
+- set the network name
+```
+echo "droneboat" | sudo tee /etc/hostname
+```
+- disable bluetooth
+```
+echo "dtoverlay=pi3-disable-bt" | sudo tee -a /boot/config.txt
+```
+- make user `pi` as sudo
+```
+sudo nano /etc/sudoers
+```
+and add a new row below the root user privilege specifications
+```
+pi ALL=(ALL:ALL) ALL
+```
+- enabling ssh
+```
+sudo raspi-config
+```
+navigate to `interfacing options` then activate ssh and reboot
+
+-  installing some needs
+```
+sudo apt-get install git curl -y
+```
+
+- installing node with n
+```
+cd ~
+curl -L https://git.io/n-install | bash
+```
+- adding the same environment to the root user
+```
+sudo su
+nano /root/.bashrc
+```
+adding this row at the end. this exports the `N_PREFIX` env variable
+and adds the node binary folder to the `PATH` environment variable.
+```
+export N_PREFIX="/home/pi/n"; [[ :$PATH: == *":$N_PREFIX/bin:"* ]] || PATH+=":$N_PREFIX/bin"
+```
+- installing PM2
+```
+sudo su
+npm install pm2 -g
+```
+
+- make that pm2 starts with a system boot
+```
+sudo su
+pm2 startup
+```
+- install dnsmasq (dns service)
+```
+sudo apt-get install dnsmasq -y
+```
+- disable dnsmasq service
+```
+sudo systemctl disable dnsmasq
+sudo systemctl stop dnsmasq
+sudo systemctl daemon-reload
+```
+- install hostapd (wifi accesspoint)
+```
+sudo apt-get install hostapd -y
+```
+- disable hostapd service
+```
+sudo systemctl disable hostapd
+sudo systemctl stop hostapd
+sudo systemctl daemon-reload
+```
+
