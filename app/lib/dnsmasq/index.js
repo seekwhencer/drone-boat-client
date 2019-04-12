@@ -81,6 +81,11 @@ module.exports = class Dnsmasq extends Super {
         fs.writeFileSync(this.options.resolv_file, resolvFileData);
     }
 
+    resetResolve(){
+        LOG(this.label, 'RESET RESOLVE');
+        spawn('/sbin/resolvconf', ['-u']);
+    }
+
     monitor(chunk) {
         if (chunk) {
             const split = chunk.toString().split('\n');
