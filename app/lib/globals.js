@@ -20,9 +20,10 @@ process.on('uncaughtException', (error) => {
     LOG('ERROR:', error);
 });
 process.on('SIGINT', function () {
+    MACHINE.dns.resolve();
     setTimeout(function () {
         process.exit(0);
-    }, 100);
+    }, 5000);
 });
 process.stdin.resume();
 
