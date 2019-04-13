@@ -1,6 +1,6 @@
 const
-    Machine = require('./lib/machine');
+    DroneBoat = require('./lib/droneboat.js');
 
 require('./lib/globals');
 
-global.MACHINE = new Machine();
+global.DRONEBOAT = new DroneBoat();

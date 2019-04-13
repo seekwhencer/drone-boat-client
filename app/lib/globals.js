@@ -20,7 +20,7 @@ process.on('uncaughtException', (error) => {
     LOG('ERROR:', error);
 });
 process.on('SIGINT', function () {
-    MACHINE.dns.resetResolve();
+    DRONEBOAT.dns.resetResolve();
     setTimeout(function () {
         process.exit(0);
     }, 5000);
