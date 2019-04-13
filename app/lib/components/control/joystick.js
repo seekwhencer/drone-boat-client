@@ -23,19 +23,19 @@ module.exports = class Joystick extends Control {
         this.fire_alt = new Button('fire_alt');
 
         this.yaw.on('change', (value) => {
-            LOG(' YAW:', value, '\r');
+            LOG(' YAW:', value, '\r\r');
         });
         this.pitch.on('change', (value) => {
-            LOG(' PITCH:', value, '\r');
+            LOG(' PITCH:', value, '\r\r');
         });
         this.throttle.on('change', (value) => {
-            LOG(' THROTTLE:', value, '\r');
+            LOG(' THROTTLE:', value, '\r\r');
         });
         this.fire.on('change', (value) => {
-            LOG(' FIRE:', value, '\r');
+            LOG(' FIRE:', value, '\r\r');
         });
         this.fire_alt.on('change', (value) => {
-            LOG(' FIRE ALT:', value, '\r');
+            LOG(' FIRE ALT:', value, '\r\r');
         });
 
         this.proc = false;

@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "pm2" : "pm2 start ecosystem.config.js",
+    "pm2": "pm2 start ecosystem.config.js",
     "dev": "export NODE_DEBUG=true && export NODE_ENV=default && node index.js",
     "prod": "export NODE_DEBUG=true && NODE_ENV=prod && node index.js"
   },
@@ -16,7 +16,8 @@
     "express": "^4.16.4",
     "formidable": "^1.2.1",
     "fs-extra": "^7.0.1",
-    "ramda": "^0.26.1"
+    "mosca": "^2.8.3",
+    "ramda": "^0.26.1",
+    "redis": "^2.8.0"
   }
 }
-
