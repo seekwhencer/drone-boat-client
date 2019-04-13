@@ -2,7 +2,8 @@ const
     Super = require('../super.js'),
     Server = require('../server'),
     DnsMasq = require('../dnsmasq'),
-    Hostapd = require('../hostapd');
+    Hostapd = require('../hostapd'),
+    Joystick = require('../components/control/blackwidow.js');
 
 module.exports = class Machine extends Super {
 
@@ -14,6 +15,8 @@ module.exports = class Machine extends Super {
 
         this.accesspoint = new Hostapd();
         this.dns = new DnsMasq();
+        this.joystick = new Joystick();
+
         this.server = new Server();
 
         LOG(this.label, 'INIT');
