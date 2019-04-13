@@ -1,1 +1,1 @@
-nodule.exports = {};
+module.exports = {};

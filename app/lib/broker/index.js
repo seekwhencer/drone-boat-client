@@ -10,6 +10,8 @@ module.exports = class Broker extends Super {
 
         this.name = 'broker';
         this.label = 'BROKER';
+        LOG(this.label, 'INIT');
+        this.mergeOptions();
 
         this.storeSettings = {
             type: 'redis',
@@ -28,10 +30,8 @@ module.exports = class Broker extends Super {
             }
         };
 
-        this.engine = new mosca.Server(settings);
+        this.engine = new mosca.Server(this.settings);
 
-        LOG(this.label, 'INIT');
-        this.mergeOptions();
     }
 
 };
