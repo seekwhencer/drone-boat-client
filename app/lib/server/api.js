@@ -13,6 +13,9 @@ module.exports = class Api extends Super {
         LOG(this.label, 'INIT');
         this.mergeOptions();
 
+        if (this.options.enabled === false)
+            return this;
+
         this.keys = [];
         this.load();
 

@@ -12,6 +12,9 @@ module.exports = class Frontend extends Super {
         LOG(this.label, 'INIT');
         this.mergeOptions();
 
+        if (this.options.enabled === false)
+            return this;
+
         APP.use('/', EXPRESS.static(`${APP_DIR}/public`));
         LOG(this.label, 'READY');
     }

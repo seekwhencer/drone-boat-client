@@ -13,6 +13,9 @@ module.exports = class Broker extends Super {
         LOG(this.label, 'INIT');
         this.mergeOptions();
 
+        if (this.options.enabled === false)
+            return this;
+
         this.storeSettings = {
             type: 'redis',
             redis: require('redis'),
@@ -22,7 +25,7 @@ module.exports = class Broker extends Super {
             host: "localhost"
         };
 
-        this.storeSettings = {
+        this.settings = {
             port: 9090,
             backend: this.storeSettings,
             persistence: {
