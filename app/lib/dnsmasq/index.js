@@ -92,7 +92,7 @@ module.exports = class Dnsmasq extends Super {
             const label = this.label;
             split.forEach((row) => {
                 if (row !== '') {
-                    LOG(label, 'CONSOLE:', row.replace('dnsmasq: ', ''));
+                    LOG(label, row.replace('dnsmasq: ', ''));
 
                     const found = this.matchLog(row, {
                         ready: 'started, '

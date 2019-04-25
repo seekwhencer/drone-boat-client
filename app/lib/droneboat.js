@@ -14,11 +14,11 @@ module.exports = class DroneBoat extends Super {
         this.name = 'droneboat';
         this.label = 'DRONEBOAT';
 
-        //this.accesspoint = new Hostapd();
-        //this.dns = new DnsMasq();
+        this.accesspoint = new Hostapd();
+        this.dns = new DnsMasq();
+        this.broker = new Broker();
+        this.server = new Server();
         this.joystick = new Joystick();
-        //this.broker = new Broker();
-        //this.server = new Server();
 
         LOG(this.label, 'INIT');
         this.mergeOptions();

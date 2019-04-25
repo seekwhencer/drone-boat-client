@@ -13,33 +13,23 @@ module.exports = class Joystick extends Control {
         LOG(this.label, 'INIT');
         this.mergeOptions();
 
-        this.raw = null;
+        this.proc = null;
         this.data = null;
 
-        this.yaw = new Axis('yaw');
-        this.pitch = new Axis('pitch');
-        this.throttle = new Axis('throttle');
-        this.fire = new Button('fire');
-        this.fire_alt = new Button('fire_alt');
-
-        this.yaw.on('change', (value) => {
-            LOG(' YAW:', value, '\r\r');
-        });
-        this.pitch.on('change', (value) => {
-            LOG(' PITCH:', value, '\r\r');
-        });
-        this.throttle.on('change', (value) => {
-            LOG(' THROTTLE:', value, '\r\r');
-        });
-        this.fire.on('change', (value) => {
-            LOG(' FIRE:', value, '\r\r');
-        });
-        this.fire_alt.on('change', (value) => {
-            LOG(' FIRE ALT:', value, '\r\r');
-        });
-
-        this.proc = false;
-
+        // axis mapping
+        for (let name in this.options.axis) {
+            this[name] = new Axis(name, this.options.axis[name]);
+            this[name].on('change', (value) => {
+                LOG(this.label, name.toUpperCase(), value, "\r\r");
+            });
+        }
+        // buttons mapping
+        for (let name in this.options.buttons) {
+            this[name] = new Button(name, this.options.buttons[name]);
+            this[name].on('change', (value) => {
+                LOG(this.label, name.toUpperCase(), value, "\r\r");
+            });
+        }
         if (this.options.autostart === true) {
             this.start();
         }
@@ -60,48 +50,28 @@ module.exports = class Joystick extends Control {
     }
 
     parseConsole(chunk) {
-        const state_map = {
-            'on': true,
-            'off': false
-        };
-        chunk = chunk
-            .replace(/\rAxes:  |Buttons:  |0:|1:|2:|3:|4:|5:|6:|7:/gi, '')
-            .replace(/  /gi, ' ');
-
-        let arr = chunk.split(' ');
-
-        if (arr[0] === 'Driver') // the first keyword in the inital console print from jstest
-            return;
-
-        arr = arr.filter(function (i) {
-            if (i != '') {
-                return true;
-            }
+        let a = chunk.split('Buttons:  ');
+        const axisRaw = a[0].replace(/\rAxes:  |[0-9]:/gi, '').replace(/\s+/gi, ' ').trim();
+        const buttonRaw = a[1].replace(/[0-9]:/gi, '').replace(/\s+/gi, ' ').trim();
+        let axisData = axisRaw.split(' ');
+        let buttonData = buttonRaw.split(' ');
+        axisData = axisData.map(val => {
+            return parseInt(val);
         });
-        this.raw = arr;
+        buttonData = buttonData.map(val => {
+            if (val === 'on') return true;
+            return false;
+        });
         this.data = {
-            axis: {
-                yaw: parseInt(arr[0]),
-                pitch: parseInt(arr[1]),
-                throttle: parseInt(arr[2])
-            },
-            button: {
-                f1: state_map[arr[6]],
-                f2: state_map[arr[7]],
-                f3: state_map[arr[8]],
-                f4: state_map[arr[9]],
-                f5: state_map[arr[10]],
-                f6: state_map[arr[11]],
-                f7: state_map[arr[12]],
-                f8: state_map[arr[13]]
-            }
+            axis: axisData,
+            button: buttonData
         };
-
-        this.yaw.value = arr[0];
-        this.pitch.value = arr[1];
-        this.throttle.value = arr[2];
-        this.fire.value = state_map[arr[6]];
-        this.fire_alt.value = state_map[arr[7]];
+        for (let name in this.options.axis) {
+            this[name].value = axisData[this[name].num];
+        }
+        for (let name in this.options.buttons) {
+            this[name].value = buttonData[this[name].num];
+        }
     };
 };
 
@@ -111,43 +81,58 @@ module.exports = class Joystick extends Control {
  *
  */
 class Abstract {
-    constructor(axis) {
+    constructor(name, num) {
         this.event = new Event();
-        this.name = axis;
+        this.name = name;
         this.value = 0;
+        this.num = num;
     }
+
     on() {
         this.event.on.apply(this.event, Array.from(arguments));
     }
+
     emit() {
         this.event.emit.apply(this.event, Array.from(arguments));
     }
+
     set value(val) {
-        if(this._value === val){
+        if (this._value === val) {
             return;
         }
         this._value = val;
         this.emit('change', val);
     }
+
     get value() {
         return this._value;
     }
+
     set name(name) {
         this._name = name;
     }
+
     get name() {
         return this._name;
+    }
+
+    set num(num) {
+        this._num = num;
+    }
+
+    get num() {
+        return this._num;
     }
 }
 
 class Axis extends Abstract {
-    constructor(args) {
-        super(args);
+    constructor(name, num) {
+        super(name, num);
     }
 }
 
 class Button extends Abstract {
-    constructor(args) {
-        super(args);
+    constructor(name, num) {
+        super(name, num);
     }
 }
