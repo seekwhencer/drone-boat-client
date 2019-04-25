@@ -12,6 +12,10 @@ module.exports = class Dnsmasq extends Super {
 
         LOG(this.label, 'INIT');
         this.mergeOptions();
+
+        if (this.options.enabled === false)
+            return this;
+
         this.proc = false;
         this.config = new Config({
             config: this.options.config,

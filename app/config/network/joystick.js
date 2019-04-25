@@ -1,5 +1,5 @@
 module.exports = {
-    enabled: true,
+    enabled: false,
     bin: '/usr/bin/jstest',
     autostart: true,
     device: '/dev/input/js0',
