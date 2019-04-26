@@ -9,7 +9,6 @@ module.exports = {
     resolv_file: '/etc/resolv.conf',
 
     config: {
-
         'interface': 'wlan0',
         'dhcp-range': 'wlan0,192.168.100.100,192.168.100.199,12h',
 
@@ -21,7 +20,6 @@ module.exports = {
         'no-hosts': true,
         'domain-needed': false,
         'bogus-priv': false,
-
         'server': [
 //            '127.0.0.1',
             '192.168.178.1',

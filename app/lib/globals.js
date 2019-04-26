@@ -20,7 +20,7 @@ process.on('uncaughtException', (error) => {
     LOG('ERROR:', error);
 });
 process.on('SIGINT', function () {
-    if(DRONEBOAT.dns)
+    if(DRONEBOAT.dns && CONFIG.dnsmasq.enabled)
         DRONEBOAT.dns.resetResolve();
 
     setTimeout(function () {
