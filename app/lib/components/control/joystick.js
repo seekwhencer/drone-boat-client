@@ -13,6 +13,9 @@ module.exports = class Joystick extends Control {
         LOG(this.label, 'INIT');
         this.mergeOptions();
 
+        if (this.options.enabled === false)
+            return this;
+
         this.proc = null;
         this.data = null;
 

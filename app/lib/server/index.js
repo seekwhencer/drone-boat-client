@@ -15,6 +15,9 @@ module.exports = class Server extends Super {
         LOG(this.label, 'INIT');
         this.mergeOptions();
 
+        if (this.options.enabled === false)
+            return this;
+
         APP.use((req, res, next) => {
             const form = new formidable.IncomingForm();
             form.parse(req, function (err, fields, files) {
