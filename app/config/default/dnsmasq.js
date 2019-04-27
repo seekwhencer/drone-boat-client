@@ -1,5 +1,5 @@
 module.exports = {
-    enabled: true,
+    enabled: false,
     bin: '/usr/sbin/dnsmasq',
     autostart: true,
     restart_delay: 0,

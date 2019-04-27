@@ -1,6 +1,7 @@
 const
     mosca = require('mosca'),
-    Super = require('../super.js');
+    Super = require('../super.js'),
+    redis = require('redis');
 
 
 module.exports = class Broker extends Super {
@@ -18,7 +19,7 @@ module.exports = class Broker extends Super {
 
         this.storeSettings = {
             type: 'redis',
-            redis: require('redis'),
+            redis: redis,
             db: 12,
             port: 6379,
             return_buffers: true, // to handle binary payloads
@@ -34,6 +35,14 @@ module.exports = class Broker extends Super {
         };
 
         this.engine = new mosca.Server(this.settings);
+
+        this.engine.on('clientConnected', function(client) {
+            LOG(this.label, 'client connected', client.id);
+        }.bind(this));
+
+        this.engine.on('published', function(packet, client) {
+            LOG(this.label, 'Published', packet.payload.toString());
+        }.bind(this));
 
     }
 
