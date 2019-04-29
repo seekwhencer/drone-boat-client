@@ -89,6 +89,9 @@ void setup()
   digitalWrite(LPWMleft, LOW);
   digitalWrite(RPWMright, LOW);
   digitalWrite(LPWMright, LOW);
+
+  analogWriteFreq(8000);
+  
   delay(1000);
   Serial.println("SETUP READY");
 }
