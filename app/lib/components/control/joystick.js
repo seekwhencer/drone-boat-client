@@ -22,15 +22,25 @@ module.exports = class Joystick extends Control {
         // axis mapping
         for (let name in this.options.axis) {
             this[name] = new Axis(name, this.options.axis[name]);
-            this[name].on('change', (value) => {
-                LOG(this.label, name.toUpperCase(), value, "\r\r");
+            this[name].on('change', (value, axis) => {
+                //LOG(this.label, name.toUpperCase(), value, "\r\r");
+                const payload = {
+                    name: axis.name,
+                    value: axis.calculated
+                };
+                DRONEBOAT.broker.publish(`movement`, payload);
             });
         }
         // buttons mapping
         for (let name in this.options.buttons) {
             this[name] = new Button(name, this.options.buttons[name]);
-            this[name].on('change', (value) => {
-                LOG(this.label, name.toUpperCase(), value, "\r\r");
+            this[name].on('change', (value, button) => {
+                //LOG(this.label, button.name.toUpperCase(), button.value, "\r\r");
+                const payload = {
+                    name: button.name,
+                    value: button.calculated
+                };
+                DRONEBOAT.broker.publish(`movement`, payload);
             });
         }
         if (this.options.autostart === true) {
@@ -70,10 +80,10 @@ module.exports = class Joystick extends Control {
             button: buttonData
         };
         for (let name in this.options.axis) {
-            this[name].value = axisData[this[name].num];
+            this[name].value = axisData[this[name].number];
         }
         for (let name in this.options.buttons) {
-            this[name].value = buttonData[this[name].num];
+            this[name].value = buttonData[this[name].number];
         }
     };
 };
@@ -84,11 +94,13 @@ module.exports = class Joystick extends Control {
  *
  */
 class Abstract {
-    constructor(name, num) {
+    constructor(name, _options) {
         this.event = new Event();
         this.name = name;
-        this.value = 0;
-        this.num = num;
+        this.options = _options;
+        this.number = this.options.number;
+        this.value = this.options.default;
+        this.calculated = 0;
     }
 
     on() {
@@ -104,7 +116,8 @@ class Abstract {
             return;
         }
         this._value = val;
-        this.emit('change', val);
+        this.calculate();
+        this.emit('change', val, this);
     }
 
     get value() {
@@ -119,23 +132,53 @@ class Abstract {
         return this._name;
     }
 
-    set num(num) {
-        this._num = num;
+    set calculated(value) {
+        this._calculated = value;
     }
 
-    get num() {
-        return this._num;
+    get calculated() {
+        return this._calculated;
+    }
+
+    set number(number) {
+        this._number = number;
+    }
+
+    get number() {
+        return this._number;
+    }
+
+    set options(options) {
+        this._options = options;
+    }
+
+    get options() {
+        return this._options;
+    }
+
+    calculate() {
+        const opts = this.options;
+        if (opts.in && opts.out) {
+            this.calculated = parseInt(this.scaleNumberRange(this.value, opts.in.min, opts.in.max, opts.out.min, opts.out.max));
+        }
+    }
+
+    scaleNumberRange(number, oldMin, oldMax, newMin, newMax) {
+        return (((newMax - newMin) * (number - oldMin)) / (oldMax - oldMin)) + newMin;
     }
 }
 
 class Axis extends Abstract {
-    constructor(name, num) {
-        super(name, num);
+    constructor(name, _options) {
+        super(name, _options);
     }
 }
 
 class Button extends Abstract {
-    constructor(name, num) {
-        super(name, num);
+    constructor(name, _options) {
+        super(name, _options);
+    }
+    calculate(){
+        this.calculated = this.value;
     }
 }
