@@ -1,6 +1,7 @@
 #include <PubSubClient.h>
 #include <SoftwareSerial.h>
 #include <ESP8266WiFi.h>
+#include <ArduinoJson.h>
 
 const char* ssid     = "droneboat";
 const char* password = "CHANGE!ME";
@@ -8,19 +9,42 @@ const char* password = "CHANGE!ME";
 char* topic = "movement";
 char* server = "droneboat";
 
+WiFiClient  wifiClient;
+
+String clientName = "mover";
+int RPWMright = 5;
+int LPWMright = 4;
+int RPWMleft = 0;
+int LPWMleft = 2;
+int maxPWM = 1023;
+
 void callback(char* topic, byte* payload, unsigned int length) {
-  // handle message arrived
+  String encoded;
+  for (int i = 0; i < length; i++) {
+    encoded += (char)payload[i];
+  }
+
+  DynamicJsonDocument json(2048);
+  DeserializationError error = deserializeJson(json, encoded);
+  if (error)
+    return;
+
+  String name = json["name"];
+  if (name == "throttle") {
+    int value = json["value"];
+    setSpeed(value, "left");
+    setSpeed(value, "right");
+    //Serial.print("Received: "); Serial.print(name); Serial.print(" : "); Serial.println(value);
+  }
+
+  
 }
 
-WiFiClient  wifiClient;
 PubSubClient client(server, 9090, callback, wifiClient);
-
-
 
 void setup()
 {
   Serial.begin(9600);
-  // Wifi Setup
   WiFi.begin(ssid, password);
   while (WiFi.status() != WL_CONNECTED) {
     delay(500);
@@ -36,47 +60,78 @@ void setup()
   Serial.println(WiFi.gatewayIP());
   delay(500);
 
-  String clientName = "mover";
+  client.setCallback(callback);
+
 
   if (client.connect((char*) clientName.c_str())) {
-    Serial.println("Connected to MQTT broker");
+    client.subscribe(topic);
+    Serial.println("CONNECTED TO MQTT BROKER");
     Serial.print("Topic is: ");
     Serial.println(topic);
 
-    if (client.publish(topic, "hello from ESP8266")) {
-      Serial.println("Publish ok");
-    }
-    else {
+    if (client.publish(topic, "HELLO")) {
+    } else {
       Serial.println("Publish failed");
     }
-  }
-  else {
+  } else {
     Serial.println("MQTT connect failed");
     Serial.println("Will reset and try again...");
     //abort();
   }
+
+  // motor driver
+  pinMode(RPWMleft, OUTPUT);
+  pinMode(LPWMleft, OUTPUT);
+  pinMode(RPWMright, OUTPUT);
+  pinMode(LPWMright, OUTPUT);
+
+  digitalWrite(RPWMleft, LOW);
+  digitalWrite(LPWMleft, LOW);
+  digitalWrite(RPWMright, LOW);
+  digitalWrite(LPWMright, LOW);
+  delay(1000);
+  Serial.println("SETUP READY");
 }
 
 void loop() {
-  static int counter = 0;
-  
-  String payload = "{\"micros\":";
-  payload += micros();
-  payload += ",\"counter\":";
-  payload += counter;
-  payload += "}";
-  
-  if (client.connected()){
-    Serial.print("Sending payload: ");
-    Serial.println(payload);
-    
-    if (client.publish(topic, (char*) payload.c_str())) {
-      Serial.println("Publish ok");
-    }
-    else {
-      Serial.println("Publish failed");
-    }
+  client.loop();
+}
+
+/**
+   wants a value between -100 and 100
+*/
+int setSpeed(int speed, String side) {
+  int pwm = 0;
+  int LPWM;
+  int RPWM;
+
+  if (side == "left") {
+    LPWM = LPWMleft;
+    RPWM = RPWMleft;
+  } else {
+    LPWM = LPWMright;
+    RPWM = RPWMright;
   }
-  ++counter;
-  delay(5000);
+
+  if (speed == pwm) {
+    //Serial.print("Stop Motor Speed: ");
+    analogWrite(LPWM, pwm);
+    analogWrite(RPWM, pwm);
+  }
+  if (speed > 0) {
+    //Serial.print("Forward Motor Speed:");
+    pwm = maxPWM / 100 * speed;
+    analogWrite(LPWM, pwm);
+    analogWrite(RPWM, 0);
+  }
+  if (speed < 0) {
+    //Serial.print("Backward Motor Speed:");
+    pwm = maxPWM / 100 * speed * -1;
+    analogWrite(LPWM, 0);
+    analogWrite(RPWM, pwm);
+  }
+  //Serial.print(speed);
+  //Serial.print(" PWM: ");
+  //Serial.println(pwm);
+  return pwm;
 }
