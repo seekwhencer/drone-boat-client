@@ -58,7 +58,7 @@ module.exports = class Broker extends Super {
             payload: _payload,
             qos: 1
         }, null, function done() {
-            LOG(this.label, 'PUBLISHING ON TOPIC', topic, 'PAYLOAD', payload);
+            //LOG(this.label, 'PUBLISHING ON TOPIC', topic, 'PAYLOAD', payload);
         }.bind(broker));
     }
 

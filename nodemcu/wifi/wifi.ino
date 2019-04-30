@@ -31,9 +31,12 @@ void callback(char* topic, byte* payload, unsigned int length) {
 
   String name = json["name"];
   if (name == "throttle") {
+    int leftValue = json["side"]["left"];
+    int rightValue = json["side"]["right"];
+    
     int value = json["value"];
-    setSpeed(value, "left");
-    setSpeed(value, "right");
+    setSpeed(leftValue, "left");
+    setSpeed(rightValue, "right");
     //Serial.print("Received: "); Serial.print(name); Serial.print(" : "); Serial.println(value);
   }
 
@@ -91,6 +94,8 @@ void setup()
   digitalWrite(LPWMright, LOW);
 
   analogWriteFreq(8000);
+  setSpeed(0,"left");
+  setSpeed(0,"right");
   
   delay(1000);
   Serial.println("SETUP READY");

@@ -1,5 +1,5 @@
 const
-    Joystick = require('./joystick');
+    Joystick = require('./joystick/');
 
 module.exports = class BlackWidow extends Joystick {
     constructor(args){
