@@ -29,49 +29,54 @@ module.exports = class Throttle extends Axis {
             return;
 
         let yaw = DRONEBOAT.joystick.yaw;
+        let source = this.normalized;
 
-        this.left = this.normalized;
-        this.right = this.normalized;
+        if (this.options.duty_time) {
+            source = this.eased;
+        }
 
-        if (this.normalized > 0) {
-            yaw.options.out.min = this.normalized * -1;
-            yaw.options.out.max = this.normalized;
+        this.left = source;
+        this.right = source;
 
+        if (source > 0) {
+            yaw.options.out.min = source * -1;
+            yaw.options.out.max = source;
             if (yaw.normalized > 0) {
-                this.left = this.normalized - yaw.normalized;
+                this.left = source - yaw.normalized;
             }
-
             if (yaw.normalized < 0) {
-                this.right = this.normalized - (yaw.normalized * -1);
+                this.right = source - (yaw.normalized * -1);
             }
         }
 
-        if (this.normalized < 0) {
-            yaw.options.out.min = this.normalized;
-            yaw.options.out.max = this.normalized * -1;
-
+        if (source < 0) {
+            yaw.options.out.min = source;
+            yaw.options.out.max = source * -1;
             if (yaw.normalized > 0) {
-                this.left = this.normalized + yaw.normalized;
+                this.left = source + yaw.normalized;
             }
             if (yaw.normalized < 0) {
-                this.right = this.normalized + (yaw.normalized * -1);
+                this.right = source + (yaw.normalized * -1);
             }
         }
-
-        LOG('>>!!', this.name, 'YAW:', yaw.normalized, typeof yaw.normalized, 'THROTTLE:', this.normalized, 'LEFT:', this.left, 'RIGHT:', this.right);
+        //LOG('>>!!', this.name, 'YAW:', yaw.normalized, typeof yaw.normalized, 'THROTTLE:', this.normalized, 'EASED', this.eased, 'LEFT:', this.left, 'RIGHT:', this.right);
     }
 
     publish() {
         const payload = {
             name: this.name,
             value: this.normalized,
+            eased: this.eased,
             side: {
                 left: this.left,
                 right: this.right,
             }
         };
-        DRONEBOAT.broker.publish(`movement`, payload);
+        try {
+            DRONEBOAT.broker.publish(`movement`, payload);
+        } catch (error) {
+            LOG(error);
+        }
+
     }
-
-
 };

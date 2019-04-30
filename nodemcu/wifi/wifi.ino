@@ -83,6 +83,8 @@ void setup()
   }
 
   // motor driver
+  analogWriteFreq(8000);
+
   pinMode(RPWMleft, OUTPUT);
   pinMode(LPWMleft, OUTPUT);
   pinMode(RPWMright, OUTPUT);
@@ -93,7 +95,6 @@ void setup()
   digitalWrite(RPWMright, LOW);
   digitalWrite(LPWMright, LOW);
 
-  analogWriteFreq(8000);
   setSpeed(0,"left");
   setSpeed(0,"right");
   
