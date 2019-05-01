@@ -1,7 +1,11 @@
 const
-    Control = require('./control'),
+    Control = require('../control.js'),
     spawn = require('child_process').spawn,
-    Event = require('events');
+    Axis = require('./axis.js');
+    Button = require('./button.js');
+    Throttle = require('./throttle.js'),
+    Yaw = require('./yaw.js');
+    Pitch = require('./pitch.js');
 
 module.exports = class Joystick extends Control {
     constructor(args) {
@@ -19,30 +23,46 @@ module.exports = class Joystick extends Control {
         this.proc = null;
         this.data = null;
 
+        const Joystick = this;
+
         // axis mapping
+        //
+        // all axis
         for (let name in this.options.axis) {
             this[name] = new Axis(name, this.options.axis[name]);
-            this[name].on('change', (value, axis) => {
-                //LOG(this.label, name.toUpperCase(), value, "\r\r");
-                const payload = {
-                    name: axis.name,
-                    value: axis.calculated
-                };
-                DRONEBOAT.broker.publish(`movement`, payload);
+            let axis = this[name];
+            axis.on('change', (value, item) => {
+                LOG('>>>', name, " : ", value);
             });
         }
+
+        this.throttle = new Throttle(this.options.axis['throttle']);
+        this.throttle.on('change', (value, throttle) => {
+            Joystick.throttle.calculateSides();
+            //Joystick.publish();
+        });
+
+        this.yaw = new Yaw(this.options.axis['yaw']);
+        this.yaw.on('change', (value, yaw) => {
+            Joystick.throttle.calculateSides();
+            //Joystick.publish();
+        });
+
         // buttons mapping
+        //
+        //
         for (let name in this.options.buttons) {
             this[name] = new Button(name, this.options.buttons[name]);
             this[name].on('change', (value, button) => {
                 //LOG(this.label, button.name.toUpperCase(), button.value, "\r\r");
                 const payload = {
                     name: button.name,
-                    value: button.calculated
+                    value: button.value
                 };
                 DRONEBOAT.broker.publish(`movement`, payload);
             });
         }
+
         if (this.options.autostart === true) {
             this.start();
         }
@@ -85,100 +105,10 @@ module.exports = class Joystick extends Control {
         for (let name in this.options.buttons) {
             this[name].value = buttonData[this[name].number];
         }
-    };
+    }
+
+    publish() {
+        this.throttle.publish();
+    }
+
 };
-
-
-/**
- *
- *
- */
-class Abstract {
-    constructor(name, _options) {
-        this.event = new Event();
-        this.name = name;
-        this.options = _options;
-        this.number = this.options.number;
-        this.value = this.options.default;
-        this.calculated = 0;
-    }
-
-    on() {
-        this.event.on.apply(this.event, Array.from(arguments));
-    }
-
-    emit() {
-        this.event.emit.apply(this.event, Array.from(arguments));
-    }
-
-    set value(val) {
-        if (this._value === val) {
-            return;
-        }
-        this._value = val;
-        this.calculate();
-        this.emit('change', val, this);
-    }
-
-    get value() {
-        return this._value;
-    }
-
-    set name(name) {
-        this._name = name;
-    }
-
-    get name() {
-        return this._name;
-    }
-
-    set calculated(value) {
-        this._calculated = value;
-    }
-
-    get calculated() {
-        return this._calculated;
-    }
-
-    set number(number) {
-        this._number = number;
-    }
-
-    get number() {
-        return this._number;
-    }
-
-    set options(options) {
-        this._options = options;
-    }
-
-    get options() {
-        return this._options;
-    }
-
-    calculate() {
-        const opts = this.options;
-        if (opts.in && opts.out) {
-            this.calculated = parseInt(this.scaleNumberRange(this.value, opts.in.min, opts.in.max, opts.out.min, opts.out.max));
-        }
-    }
-
-    scaleNumberRange(number, oldMin, oldMax, newMin, newMax) {
-        return (((newMax - newMin) * (number - oldMin)) / (oldMax - oldMin)) + newMin;
-    }
-}
-
-class Axis extends Abstract {
-    constructor(name, _options) {
-        super(name, _options);
-    }
-}
-
-class Button extends Abstract {
-    constructor(name, _options) {
-        super(name, _options);
-    }
-    calculate(){
-        this.calculated = this.value;
-    }
-}
