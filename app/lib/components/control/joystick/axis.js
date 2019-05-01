@@ -43,7 +43,7 @@ module.exports = class Axis extends Abstract {
         if (opts.in && opts.out) {
             this.normalized = parseInt(this.scaleNumberRange(this.value, opts.in.min, opts.in.max, opts.out.min, opts.out.max));
         }
-        this.ease();
+        //this.ease();
     }
 
     scaleNumberRange(number, oldMin, oldMax, newMin, newMax) {

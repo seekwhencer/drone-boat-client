@@ -39,13 +39,13 @@ module.exports = class Joystick extends Control {
         this.throttle = new Throttle(this.options.axis['throttle']);
         this.throttle.on('change', (value, throttle) => {
             Joystick.throttle.calculateSides();
-            //Joystick.publish();
+            Joystick.publish();
         });
 
         this.yaw = new Yaw(this.options.axis['yaw']);
         this.yaw.on('change', (value, yaw) => {
             Joystick.throttle.calculateSides();
-            //Joystick.publish();
+            Joystick.publish();
         });
 
         // buttons mapping

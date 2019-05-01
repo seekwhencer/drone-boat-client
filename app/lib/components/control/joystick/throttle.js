@@ -32,7 +32,7 @@ module.exports = class Throttle extends Axis {
         let source = this.normalized;
 
         if (this.options.duty_time) {
-            source = this.eased;
+        //    source = this.eased;
         }
 
         this.left = source;

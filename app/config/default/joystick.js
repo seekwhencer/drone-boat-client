@@ -34,8 +34,8 @@ module.exports = {
             duty_time: 50,
             duty_value: 1,
             in: {
-                max: -40000,
-                min: 40000
+                max: -33000,
+                min: 33000
             },
             out: {
                 max: 100,
