@@ -83,7 +83,7 @@ void setup()
   }
 
   // motor driver
-  analogWriteFreq(8000);
+  analogWriteFreq(10000);
 
   pinMode(RPWMleft, OUTPUT);
   pinMode(LPWMleft, OUTPUT);
