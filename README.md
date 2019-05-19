@@ -1,5 +1,17 @@
 # drone boat client
-This is the node app to run the drone boat. 
+This is the node app to run the drone boat.
+
+**DRAFT STATE**
+
+That works at the moment:
+
+- managing accesspoint
+- managing dns server
+- mqtt broker
+- joystick control
+- controlling two motor drivers via mqtt on a nodeMCU
+
+## Features:
 
 - control two motors with direction and speed (PWM)
 - gps
