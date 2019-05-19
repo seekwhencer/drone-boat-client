@@ -3,7 +3,6 @@ const
     Super = require('../super.js'),
     redis = require('redis');
 
-
 module.exports = class Broker extends Super {
 
     constructor(args) {
