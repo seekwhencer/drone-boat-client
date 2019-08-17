@@ -33,14 +33,14 @@ void callback(char* topic, byte* payload, unsigned int length) {
   if (name == "throttle") {
     int leftValue = json["side"]["left"];
     int rightValue = json["side"]["right"];
-    
+
     int value = json["value"];
     setSpeed(leftValue, "left");
     setSpeed(rightValue, "right");
-    //Serial.print("Received: "); Serial.print(name); Serial.print(" : "); Serial.println(value);
+    Serial.print("Received: "); Serial.print(name); Serial.print(" : "); Serial.println(value);
   }
 
-  
+
 }
 
 PubSubClient client(server, 9090, callback, wifiClient);
@@ -95,9 +95,9 @@ void setup()
   digitalWrite(RPWMright, LOW);
   digitalWrite(LPWMright, LOW);
 
-  setSpeed(0,"left");
-  setSpeed(0,"right");
-  
+  setSpeed(0, "left");
+  setSpeed(0, "right");
+
   delay(1000);
   Serial.println("SETUP READY");
 }
@@ -139,8 +139,8 @@ int setSpeed(int speed, String side) {
     analogWrite(LPWM, 0);
     analogWrite(RPWM, pwm);
   }
-  //Serial.print(speed);
-  //Serial.print(" PWM: ");
-  //Serial.println(pwm);
+  Serial.print(speed);
+  Serial.print(" PWM: ");
+  Serial.println(pwm);
   return pwm;
 }

@@ -81,7 +81,7 @@ export default class extends Module {
     processEvents(chunk) {
         const events = {
             ready: [
-                'pairwise key handshake completed',
+                'Setup of interface done',
             ],
             error: 'Failed to allocate required memory.'
         };
