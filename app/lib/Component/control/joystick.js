@@ -86,7 +86,9 @@ export default class Joystick extends Module {
             return parseInt(val);
         });
         buttonData = buttonData.map(val => {
-            if (val === 'on') return true;
+            if (val === 'on')
+                return true;
+
             return false;
         });
         this.data = {
