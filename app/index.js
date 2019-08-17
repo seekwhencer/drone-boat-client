@@ -1,6 +1,11 @@
-const
-    DroneBoat = require('./lib/droneboat.js');
+import './lib/Globals.js';
+import Droneboat from './lib/Droneboat.js';
 
-require('./lib/globals');
+new Droneboat()
+    .then(droneboat => {
+        global.BOAT = droneboat;
 
-global.DRONEBOAT = new DroneBoat();
+        LOG('');
+        LOG('');
+        LOG(this.label, '>>> ALL COMPLETE!');
+    });
