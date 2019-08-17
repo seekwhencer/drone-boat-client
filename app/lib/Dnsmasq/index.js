@@ -37,6 +37,18 @@ export default class extends Module {
                 LOG('');
                 resolve(this);
             });
+
+            this.on('client_connected', chunk => {
+                const clientArray = chunk.split('\n')[3].split(' ').slice(-3);
+                const client = {
+                    subject: 'client',
+                    action: 'connected',
+                    ip4: clientArray[0],
+                    mac: clientArray[1],
+                    hostname: clientArray[2]
+                };
+                BROKER.publish(`dns`, client);
+            });
         });
     }
 
@@ -92,7 +104,8 @@ export default class extends Module {
             ready: [
                 'gestartet',
             ],
-            error: 'Failed to allocate required memory.'
+            error: 'Failed to allocate required memory.',
+            client_connected: 'DHCPACK(wlan0)',
         };
         Object.keys(events).forEach(m => {
             if (events[m] === '')
@@ -101,12 +114,12 @@ export default class extends Module {
             if (typeof events[m] === 'object') {
                 events[m].forEach(mm => {
                     if (chunk.includes(mm)) {
-                        this.emit(m);
+                        this.emit(m, chunk);
                     }
                 });
             } else {
                 if (chunk.includes(events[m])) {
-                    this.emit(m);
+                    this.emit(m, chunk);
                 }
             }
         });
@@ -129,7 +142,7 @@ export default class extends Module {
         fs.writeFileSync(this.options.resolv_file, resolvFileData);
     }
 
-    resetResolve(){
+    resetResolve() {
         LOG(this.label, 'RESET RESOLVE');
         spawn('/sbin/resolvconf', ['-u']);
     }
