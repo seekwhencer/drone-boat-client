@@ -38,7 +38,7 @@ export default class extends Module {
                 resolve(this);
             });
 
-            this.on('client_connected', chunk => {
+            /*this.on('client_connected', chunk => {
                 const clientArray = chunk.split('\n')[3].split(' ').slice(-3);
                 const client = {
                     subject: 'client',
@@ -48,7 +48,7 @@ export default class extends Module {
                     hostname: clientArray[2]
                 };
                 BROKER.publish(`dns`, client);
-            });
+            });*/
         });
     }
 

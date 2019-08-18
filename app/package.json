@@ -8,7 +8,7 @@
     "start": "node index.js",
     "pm2": "pm2 start ecosystem.config.js",
     "dev": "export NODE_DEBUG=true && export NODE_ENV=default && node --experimental-modules index.js",
-    "net": "export NODE_DEBUG=true && export NODE_ENV=network && node --experimental-modules index.js",
+    "net": "export NODE_DEBUG=true && export NODE_ENV=network && node --experimental-modules network.js",
     "prod": "export NODE_DEBUG=true && NODE_ENV=prod && node --experimental-modules index.js"
   },
   "author": "",

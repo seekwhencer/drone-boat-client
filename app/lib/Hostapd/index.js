@@ -34,14 +34,14 @@ export default class extends Module {
                 resolve(this);
             });
 
-            this.on('client_disconnected', chunk => {
+            /*this.on('client_disconnected', chunk => {
                 const client = {
                     subject: 'client',
                     action: 'disconnected'
                     // @TODO which client? a client stack?
                 };
                 BROKER.publish(`dns`, client);
-            });
+            });*/
 
         });
     }
