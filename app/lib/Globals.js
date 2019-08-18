@@ -19,8 +19,11 @@ process.on('uncaughtException', error => {
 });
 process.on('SIGINT', () => {
 
-    if(DNS && CONFIG.dns.enabled)
+    try{
         DNS.resetResolve();
+    } catch(e){
+
+    }
 
     // some graceful exit code
     setTimeout(() => {

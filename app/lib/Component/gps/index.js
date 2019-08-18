@@ -13,6 +13,10 @@ export default class extends Module {
         this.defaults = CONFIG.gps;
         this.mergeOptions(args);
 
+        this.process = {
+            baudrate : false
+        };
+
         this.lat = false;
         this.lon = false;
         this.time = false;
@@ -83,7 +87,9 @@ export default class extends Module {
     }
 
     setBaudrate() {
-        this.process.baudrate = spawn('/bin/stty', ['-F', this.options.device, 'ispeed', this.options.baudrate]);
+        const processOptions = ['-F', this.options.device, 'ispeed', this.options.baudrate];
+        LOG(this.label, 'SET BAUDRATE', JSON.stringify(processOptions));
+        this.process.baudrate = spawn('/bin/stty', processOptions);
         this.process.baudrate.stdout.setEncoding('utf8');
         this.process.baudrate.stdout.on('data', chunk => {
             if (this.options.tty === true) {
