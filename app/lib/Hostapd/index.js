@@ -34,6 +34,15 @@ export default class extends Module {
                 resolve(this);
             });
 
+            this.on('client_disconnected', chunk => {
+                const client = {
+                    subject: 'client',
+                    action: 'disconnected'
+                    // @TODO which client? a client stack?
+                };
+                BROKER.publish(`dns`, client);
+            });
+
         });
     }
 
@@ -83,7 +92,8 @@ export default class extends Module {
             ready: [
                 'Setup of interface done',
             ],
-            error: 'Failed to allocate required memory.'
+            error: 'Failed to allocate required memory.',
+            client_disconnected: 'disassociated'
         };
         Object.keys(events).forEach(m => {
             if (events[m] === '')
@@ -92,12 +102,12 @@ export default class extends Module {
             if (typeof events[m] === 'object') {
                 events[m].forEach(mm => {
                     if (chunk.includes(mm)) {
-                        this.emit(m);
+                        this.emit(m, chunk);
                     }
                 });
             } else {
                 if (chunk.includes(events[m])) {
-                    this.emit(m);
+                    this.emit(m, chunk);
                 }
             }
         });
