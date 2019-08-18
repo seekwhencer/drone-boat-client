@@ -20,6 +20,8 @@ export default class extends Module {
         this.speed = false;
         this.system_time_set = false;
 
+        this.setBaudrate();
+
         this.gps = new Gps();
         this.gps.on('data', () => {
             this.mapState();
@@ -78,5 +80,15 @@ export default class extends Module {
             LOG(this.label, 'SET SYSTEM DATE AND TIME WITH OPTIONS', this.timestamp, JSON.stringify(processOptions));
             spawn('/bin/date', processOptions);
         }, 1000);
+    }
+
+    setBaudrate() {
+        this.process.baudrate = spawn('/bin/stty', ['-F', this.options.device, 'ispeed', this.options.baudrate]);
+        this.process.baudrate.stdout.setEncoding('utf8');
+        this.process.baudrate.stdout.on('data', chunk => {
+            if (this.options.tty === true) {
+                LOG(this.label, 'TTY BAUDRATE', chunk.toString().trim());
+            }
+        });
     }
 };

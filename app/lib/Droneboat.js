@@ -17,15 +17,8 @@ export default class DroneBoat extends Module {
             this.mergeOptions(args);
             LOG(this.label, 'INIT');
 
-            new Hostapd()
-                .then(accesspoint => {
-                    global.ACCESSPOINT = accesspoint;
-                    return new Dnsmasq();
-                })
-                .then(dnsmasq => {
-                    global.DNS = dnsmasq;
-                    return new Broker();
-                })
+
+            return new Broker()
                 .then(broker => {
                     global.BROKER = broker;
                     return new Api();
