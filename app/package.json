@@ -8,7 +8,8 @@
     "start": "node index.js",
     "pm2": "pm2 start ecosystem.config.js",
     "dev": "export NODE_DEBUG=true && export NODE_ENV=default && node --experimental-modules index.js",
-    "net": "export NODE_DEBUG=true && export NODE_ENV=network && node --experimental-modules network.js",
+    "network": "export NODE_DEBUG=true && export NODE_ENV=network && node --experimental-modules network.js",
+    "control": "export NODE_DEBUG=true && export NODE_ENV=control && node --experimental-modules control.js",
     "prod": "export NODE_DEBUG=true && NODE_ENV=prod && node --experimental-modules index.js"
   },
   "author": "",
@@ -23,6 +24,7 @@
     "gps": "^0.5.3",
     "ini": "^1.3.5",
     "mosca": "^2.8.3",
+    "mqtt": "^3.0.0",
     "ramda": "^0.26.1",
     "redis": "^2.8.0",
     "serialport": "^7.1.5"

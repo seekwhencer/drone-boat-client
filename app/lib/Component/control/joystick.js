@@ -44,7 +44,7 @@ export default class Joystick extends Module {
                     name: button.name,
                     value: button.value
                 };
-                BROKER.publish(`movement`, payload);
+                MQTT.publish(`movement`, payload);
             });
         }
 

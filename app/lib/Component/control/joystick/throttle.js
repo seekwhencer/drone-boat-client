@@ -69,7 +69,7 @@ export default class extends Axis {
             }
         };
         try {
-            BROKER.publish(`movement`, payload);
+            MQTT.publish(`movement`, payload);
         } catch (error) {
             LOG(error);
         }

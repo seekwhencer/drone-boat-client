@@ -30,7 +30,7 @@ export default class extends Module {
             };
 
             this.settings = {
-                port: 9090,
+                port: parseInt(this.options.port),
                 backend: this.storeSettings,
                 persistence: {
                     factory: mosca.persistence.Redis
@@ -47,7 +47,7 @@ export default class extends Module {
                 if (!client)
                     return;
 
-                LOG(this.label, 'Published from:', client.id, packet.payload.toString());
+                LOG(this.label, 'GOT DATA FROM: >', client.id, '<  TOPIC >', packet.topic,'<  ',packet.payload.toString());
             });
 
             LOG('');

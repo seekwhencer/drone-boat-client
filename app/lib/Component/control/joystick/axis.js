@@ -49,7 +49,7 @@ export default class extends Abstract {
             }
         };
         try {
-            BROKER.publish(`movement`, payload);
+            MQTT.publish(`movement`, payload);
         } catch (error) {
             LOG(error);
         }

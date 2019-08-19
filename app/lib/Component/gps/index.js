@@ -14,7 +14,7 @@ export default class extends Module {
         this.mergeOptions(args);
 
         this.process = {
-            baudrate : false
+            baudrate: false
         };
 
         this.lat = false;
@@ -37,7 +37,9 @@ export default class extends Module {
         this.parser = new Readline();
         this.port.pipe(this.parser);
         this.parser.on('data', line => {
-            this.gps.update(line);
+            try {
+                this.gps.update(line);
+            } catch (e) {}
         });
     }
 
@@ -71,7 +73,7 @@ export default class extends Module {
             return false;
 
         this.payload = payload;
-        BROKER.publish(`gps`, this.payload);
+        MQTT.publish(`gps`, this.payload);
     }
 
     setSystemTime() {

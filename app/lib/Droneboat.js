@@ -1,8 +1,7 @@
 import Module from './Module.js';
-import Hostapd from './Hostapd/index.js';
-import Dnsmasq from './Dnsmasq/index.js';
 import Broker from './Broker/index.js';
 import Api from './Api/index.js';
+import MqttClient from './MqttClient/index.js';
 
 import Component from './Component/component.js';
 
@@ -21,18 +20,22 @@ export default class DroneBoat extends Module {
             return new Broker()
                 .then(broker => {
                     global.BROKER = broker;
+                    return new MqttClient();
+                })
+                .then(mqttclient => {
+                    global.MQTT = mqttclient;
                     return new Api();
                 })
                 .then(api => {
                     global.API = api;
-                    return new Component({
+                    /*return new Component({
                         type: 'Control',
                         item: 'Joystick',
                         options: 'widdow'
                     });
                 })
                 .then(joystick => {
-                    global.JOYSTICK = joystick;
+                    global.JOYSTICK = joystick;*/
                     return new Component({
                         type: 'Gps',
                         options: 'mouse'

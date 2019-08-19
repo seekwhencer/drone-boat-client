@@ -1,6 +1,7 @@
 import Module from './Module.js';
 import Hostapd from './Hostapd/index.js';
 import Dnsmasq from './Dnsmasq/index.js';
+import MqttClient from "./MqttClient/index.js";
 
 export default class DroneBoat extends Module {
 
@@ -13,7 +14,11 @@ export default class DroneBoat extends Module {
             this.mergeOptions(args);
             LOG(this.label, 'INIT');
 
-            new Hostapd()
+            new MqttClient()
+                .then(mqttclient => {
+                    global.MQTT = mqttclient;
+                    return new Hostapd();
+                })
                 .then(accesspoint => {
                     global.ACCESSPOINT = accesspoint;
                     return new Dnsmasq();
@@ -23,5 +28,4 @@ export default class DroneBoat extends Module {
                 });
         });
     }
-
 };
