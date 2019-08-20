@@ -25,7 +25,7 @@ export default class extends Module {
                 redis: redis,
                 db: 12,
                 port: 6379,
-                return_buffers: true, // to handle binary payloads
+                return_buffers: true,
                 host: "localhost"
             };
 
