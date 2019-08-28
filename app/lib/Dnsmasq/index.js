@@ -39,10 +39,17 @@ export default class extends Module {
             });
 
             this.on('client_connected', chunk => {
-                if(!chunk)
+                if (!chunk || chunk === 'undefined')
                     return;
 
-                const clientArray = chunk.split('\n')[3].split(' ').slice(-3);
+                const clientArraySrc = chunk.split('\n');
+                if(!clientArraySrc[3])
+                    return;
+
+                if (clientArraySrc[3].length < 2)
+                    return;
+
+                const clientArray = clientArraySrc[3].split(' ').slice(-3);
                 const client = {
                     subject: 'client',
                     action: 'connected',
@@ -108,7 +115,7 @@ export default class extends Module {
                 'gestartet',
             ],
             error: 'Failed to allocate required memory.',
-            client_connected: 'DHCPACK(wlan0)',
+            client_connected: `DHCPACK(${this.options.config.interface})`,
         };
         Object.keys(events).forEach(m => {
             if (events[m] === '')

@@ -47,8 +47,6 @@ void setup()
 {
   Serial.begin(9600);
   client.setCallback(callback);
-
-  WIFI_login();
   
   // motor driver
   analogWriteFreq(10000);
@@ -65,8 +63,11 @@ void setup()
 
   setSpeed(0, "left");
   setSpeed(0, "right");
+  
+  WIFI_login();
 
-  delay(1000);
+  deviceReady();
+  
   //Serial.println("SETUP READY");
 }
 
@@ -84,6 +85,7 @@ void loop() {
 
 void WIFI_login() {
   Serial.printf("Connecting to %s ", ssid);
+  WiFi.softAPdisconnect(true);
   WiFi.begin(ssid, password);
  // WiFi.config(staticIP, gateway, subnet);
   while (WiFi.status() != WL_CONNECTED)
@@ -158,4 +160,37 @@ int setSpeed(int speed, String side) {
   //Serial.print(" PWM: ");
   //Serial.println(pwm);
   return pwm;
+}
+
+void deviceReady(){
+  setSpeed(25, "left");
+  delay(300);
+  setSpeed(50, "left");
+  delay(300);
+  setSpeed(75, "left");
+  delay(300);
+  setSpeed(100, "left");
+  delay(300);
+  setSpeed(0, "left");
+  setSpeed(25, "right");
+  delay(300);
+  setSpeed(50, "right");
+  delay(300);
+  setSpeed(75, "right");
+  delay(300);
+  setSpeed(100, "right");
+  delay(300);
+  setSpeed(0, "right");
+  delay(200);
+  setSpeed(100, "right");
+  setSpeed(100, "left");
+  delay(200);
+  setSpeed(0, "right");
+  setSpeed(0, "left");
+  delay(100);
+  setSpeed(100, "right");
+  setSpeed(100, "left");
+  delay(200);
+  setSpeed(0, "right");
+  setSpeed(0, "left");
 }

@@ -48,6 +48,7 @@ void loop() {
 
 void WIFI_login() {
   Serial.printf("Connecting to %s ", ssid);
+  WiFi.softAPdisconnect(true);
   WiFi.begin(ssid, password);
  // WiFi.config(staticIP, gateway, subnet);
   while (WiFi.status() != WL_CONNECTED)

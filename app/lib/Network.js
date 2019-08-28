@@ -2,6 +2,7 @@ import Module from './Module.js';
 import Hostapd from './Hostapd/index.js';
 import Dnsmasq from './Dnsmasq/index.js';
 import MqttClient from "./MqttClient/index.js";
+import Network from "./Network/index.js";
 
 export default class DroneBoat extends Module {
 
@@ -25,6 +26,10 @@ export default class DroneBoat extends Module {
                 })
                 .then(dnsmasq => {
                     global.DNS = dnsmasq;
+                    return new Network();
+                })
+                .then(network => {
+                    global.NETWORK = network;
                 });
         });
     }
