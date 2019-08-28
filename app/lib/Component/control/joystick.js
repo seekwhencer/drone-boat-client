@@ -25,14 +25,14 @@ export default class Joystick extends Module {
         this.throttle = new Throttle(this.options.axis.throttle);
         this.throttle.on('change', (value, throttle) => {
             this.throttle.calculateSides();
-            this.publish();
+            this.throttle.publish();
         });
 
         // left / right
         this.yaw = new Yaw(this.options.axis.yaw);
         this.yaw.on('change', (value, yaw) => {
             this.throttle.calculateSides();
-            this.publish();
+            this.throttle.publish();
         });
 
         // buttons mapping
@@ -40,11 +40,7 @@ export default class Joystick extends Module {
             this[name] = new Button(name, this.options.buttons[name]);
             this[name].on('change', (value, button) => {
                 //LOG(this.label, button.name.toUpperCase(), button.value, "\r\r");
-                const payload = {
-                    name: button.name,
-                    value: button.value
-                };
-                MQTT.publish(`movement`, payload);
+                this.button[name].publish();
             });
         }*/
 
@@ -54,14 +50,19 @@ export default class Joystick extends Module {
                 if (value === false) {
                     this.throttle.value = 0;
                 }
+                this.throttle.calculateSides();
+                this.throttle.publish();
+                this.button7.publish();
             } catch (e) {}
 
 
-            const payload = {
-                name: button.name,
-                value: button.value
-            };
-            MQTT.publish(`movement`, payload);
+        });
+
+        this.button1 = new Button('button1', this.options.buttons.button1);
+        this.button1.on('change', (value, button) => {
+            this.throttle.calculateSides();
+            this.throttle.publish();
+            this.button1.publish();
         });
 
         if (this.options.autostart === true) {

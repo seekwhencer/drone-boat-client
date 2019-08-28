@@ -40,27 +40,48 @@ export default class extends Axis {
         this.left = source;
         this.right = source;
 
-        if (source > 0) {
-            yaw.options.out.min = source * -1;
-            yaw.options.out.max = source;
-            if (yaw.normalized > 0) {
-                this.left = source - yaw.normalized;
+        let percent = yaw.normalized / 100;
+
+        // left
+        if (percent > 0) {
+            percent = 1 - percent;
+            this.left = parseInt(this.right * percent);
+
+        }
+        // right
+        if (percent < 0) {
+            percent = 1 + percent;
+            this.right = parseInt((this.left * percent));
+        }
+
+        // flip the other side with same throttle to rotate on place
+        if (JOYSTICK.button1.value === true) {
+            if (source > 0) {
+                if (this.right > this.left) {
+                    this.left = this.right * -1;
+                }
+                if (this.left > this.right) {
+                    this.right = this.left * -1;
+                }
             }
-            if (yaw.normalized < 0) {
-                this.right = source - (yaw.normalized * -1);
+            if (source < 0) {
+                if (this.right < this.left) {
+                    this.left = this.right * -1;
+                }
+                if (this.left < this.right) {
+                    this.right = this.left * -1;
+                }
             }
         }
 
-        if (source < 0) {
-            yaw.options.out.min = source;
-            yaw.options.out.max = source * -1;
-            if (yaw.normalized > 0) {
-                this.left = source + yaw.normalized;
-            }
-            if (yaw.normalized < 0) {
-                this.right = source + (yaw.normalized * -1);
-            }
-        }
+        // flip backwards
+        /*if (source < 0) {
+            const r = this.right;
+            const l = this.left;
+            this.right = l;
+            this.left = r;
+        }*/
+
         //LOG('>>!!', this.name, 'YAW:', yaw.normalized, typeof yaw.normalized, 'THROTTLE:', this.normalized, 'EASED', this.eased, 'LEFT:', this.left, 'RIGHT:', this.right);
     }
 

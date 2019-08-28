@@ -4,6 +4,7 @@ export default class extends Abstract {
     constructor(name, options) {
         super(name, options);
         this.normalized = 0;
+        this.reset = this.options;
         this.normalize();
     }
 
@@ -39,7 +40,7 @@ export default class extends Abstract {
         return (((newMax - newMin) * (number - oldMin)) / (oldMax - oldMin)) + newMin;
     }
 
-    publish() {
+    /*publish() {
         const payload = {
             name: this.name,
             value: this.normalized,
@@ -54,5 +55,5 @@ export default class extends Abstract {
             LOG(error);
         }
 
-    }
+    }*/
 };
