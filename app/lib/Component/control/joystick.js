@@ -36,7 +36,7 @@ export default class Joystick extends Module {
         });
 
         // buttons mapping
-        for (let name in this.options.buttons) {
+        /*for (let name in this.options.buttons) {
             this[name] = new Button(name, this.options.buttons[name]);
             this[name].on('change', (value, button) => {
                 //LOG(this.label, button.name.toUpperCase(), button.value, "\r\r");
@@ -46,7 +46,23 @@ export default class Joystick extends Module {
                 };
                 MQTT.publish(`movement`, payload);
             });
-        }
+        }*/
+
+        this.button7 = new Button('button7', this.options.buttons.button7);
+        this.button7.on('change', (value, button) => {
+            try {
+                if (value === false) {
+                    this.throttle.value = 0;
+                }
+            } catch (e) {}
+
+
+            const payload = {
+                name: button.name,
+                value: button.value
+            };
+            MQTT.publish(`movement`, payload);
+        });
 
         if (this.options.autostart === true) {
             this.start();

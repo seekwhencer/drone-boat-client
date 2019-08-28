@@ -27,6 +27,12 @@ export default class extends Axis {
     calculateSides() {
 //        if (!JOYSTICK)
 //            return;
+        if (JOYSTICK.button7.value !== true) {
+            this.value = 0;
+            this.left = 0;
+            this.right = 0;
+            return;
+        }
 
         let yaw = JOYSTICK.yaw;
         let source = this.normalized;
@@ -73,6 +79,7 @@ export default class extends Axis {
         } catch (error) {
             LOG(error);
         }
-
     }
+
+
 };
