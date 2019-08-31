@@ -1,6 +1,7 @@
 import Module from '../Module.js';
 import mosca from 'mosca';
 import redis from 'redis';
+import http from 'http';
 
 export default class extends Module {
 
@@ -26,10 +27,11 @@ export default class extends Module {
                 db: 12,
                 port: 6379,
                 return_buffers: true,
-                host: "localhost"
+                host: "0.0.0.0"
             };
 
             this.settings = {
+                host: '0.0.0.0',
                 port: parseInt(this.options.port),
                 backend: this.storeSettings,
                 persistence: {
@@ -37,7 +39,12 @@ export default class extends Module {
                 }
             };
 
+            this.server = http.createServer();
             this.engine = new mosca.Server(this.settings);
+            this.engine.attachHttpServer(this.server);
+            this.server.listen(this.options.ws_port, () => {
+                LOG(this.label, 'WS SERVER IS UP ON PORT:', this.options.ws_port);
+            });
 
             this.engine.on('clientConnected', (client) => {
                 LOG(this.label, 'client connected:', client.id);
@@ -47,7 +54,7 @@ export default class extends Module {
                 if (!client)
                     return;
 
-                LOG(this.label, 'GOT DATA FROM: >', client.id, '<  TOPIC >', packet.topic,'<  ',packet.payload.toString());
+                LOG(this.label, 'GOT DATA FROM: >', client.id, '<  TOPIC >', packet.topic, '<  ', packet.payload.toString());
             });
 
             LOG('');
