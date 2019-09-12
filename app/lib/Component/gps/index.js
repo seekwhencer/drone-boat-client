@@ -46,7 +46,6 @@ export default class extends Module {
     mapState() {
         const date = new Date(this.gps.state.time);
 
-        this.milliseconds = `${Date.parse(this.gps.state.time)}`.slice(-4);
         this.time = date.toLocaleString();
         this.timestamp = Date.parse(this.time);
         this.lat = this.gps.state.lat;
@@ -65,7 +64,6 @@ export default class extends Module {
             lon: this.lon,
             time: this.time,
             timestamp: this.timestamp,
-            milliseconds: this.milliseconds,
             speed: this.speed
         };
 

@@ -2,6 +2,7 @@ import Module from './Module.js';
 import Broker from './Broker/index.js';
 import Api from './Api/index.js';
 import MqttClient from './MqttClient/index.js';
+import Influx from './Influx/index.js';
 
 import Component from './Component/component.js';
 
@@ -19,6 +20,10 @@ export default class DroneBoat extends Module {
             return new Broker()
                 .then(broker => {
                     global.BROKER = broker;
+                    return new Influx();
+                })
+                .then(influx => {
+                    global.INFLUX = influx;
                     return new MqttClient();
                 })
                 .then(mqttclient => {

@@ -54,7 +54,11 @@ export default class extends Module {
                 if (!client)
                     return;
 
-                LOG(this.label, 'GOT DATA FROM: >', client.id, '<  TOPIC >', packet.topic, '<  ', packet.payload.toString());
+                // link here the influx database
+                INFLUX.message(packet.topic, packet.payload, client.id);
+
+                if (this.options.tty === true)
+                    LOG(this.label, 'GOT DATA FROM: >', client.id, '<  TOPIC >', packet.topic, '<  ', packet.payload.toString());
             });
 
             LOG('');
