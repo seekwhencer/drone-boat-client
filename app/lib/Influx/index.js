@@ -24,13 +24,19 @@ export default class extends Module {
     };
 
     message(topic, payload, clientId) {
-        payload = JSON.parse(payload.toString());
+        if (payload.toString().charAt(0) !== '{') // check if the payload is a json string
+            return;
 
+        try {
+            payload = JSON.parse(payload.toString());
+        } catch (e) {
+            payload = {
+                message: payload
+            }
+        }
         let point = {
             measurement: topic,
-            tags: {
-
-            },
+            tags: {},
             fields: {
                 clientId: clientId,
                 ...payload
@@ -43,11 +49,11 @@ export default class extends Module {
                 point
             ])
             .then(() => {
-                if(this.options.tty === true)
+                if (this.options.tty === true)
                     LOG(this.label, 'WRITE DATA' + JSON.stringify(point));
             })
             .catch((error) => {
-                LOG(this.label, error);
+                LOG(this.label, 'ERROR WRITING DATABASE', JSON.stringify(point));
             });
     }
 };

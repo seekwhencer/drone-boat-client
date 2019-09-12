@@ -42,12 +42,31 @@ export default class extends Module {
             this.server = http.createServer();
             this.engine = new mosca.Server(this.settings);
             this.engine.attachHttpServer(this.server);
+
             this.server.listen(this.options.ws_port, () => {
                 LOG(this.label, 'WS SERVER IS UP ON PORT:', this.options.ws_port);
             });
 
             this.engine.on('clientConnected', (client) => {
-                LOG(this.label, 'client connected:', client.id);
+                LOG(this.label, 'CLIENT CONNECTED:', client.id);
+                try{
+                    MQTT.publish('network', {
+                        clientId: client.id,
+                        state: 'connected',
+                        timestamp: parseInt(Date.now() / 1000)
+                    });
+                }catch(e){}
+            });
+
+            this.engine.on('clientDisconnected', (client) => {
+                LOG(this.label, 'CLIENT DISCONNECTED:', client.id);
+                try{
+                    MQTT.publish('network', {
+                        clientId: client.id,
+                        state: 'disconnected',
+                        timestamp: parseInt(Date.now() / 1000)
+                    });
+                }catch(e){}
             });
 
             this.engine.on('published', (packet, client) => {
