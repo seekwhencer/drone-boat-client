@@ -16,7 +16,6 @@ export default class DroneBoat extends Module {
             this.mergeOptions(args);
             LOG(this.label, 'INIT');
 
-
             return new Broker()
                 .then(broker => {
                     global.BROKER = broker;
@@ -28,14 +27,6 @@ export default class DroneBoat extends Module {
                 })
                 .then(api => {
                     global.API = api;
-                    /*return new Component({
-                        type: 'Control',
-                        item: 'Joystick',
-                        options: 'widdow'
-                    });
-                })
-                .then(joystick => {
-                    global.JOYSTICK = joystick;*/
                     return new Component({
                         type: 'Gps',
                         options: 'mouse'
@@ -43,6 +34,7 @@ export default class DroneBoat extends Module {
                 })
                 .then(gps => {
                     global.GPS = gps;
+                    resolve(this);
                 })
         });
     }

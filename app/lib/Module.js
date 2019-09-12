@@ -1,7 +1,6 @@
 import {EventEmitter} from 'events';
 import Crypto from 'crypto';
 import fs from 'fs-extra';
-import path from 'path';
 import * as R from './Ramda.js';
 
 export default class Module {

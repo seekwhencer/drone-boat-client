@@ -21,7 +21,7 @@ export default class extends Module {
             // if the type is not the item
             if (Components[this.type][this.item]) {
                 const options = CONFIG[this.item.toLowerCase()];
-                resolve(new Components[this.type][this.item](options));
+                resolve(new Components[this.type][this.item](options)); // magic here
                 return;
             }
 

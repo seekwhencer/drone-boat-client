@@ -7,5 +7,7 @@ new Droneboat()
 
         LOG('');
         LOG('');
-        LOG(this.label, '>>> ALL COMPLETE!');
+        LOG('>>>    APP IS RUNNING ... ');
+        LOG('');
+        LOG('');
     });

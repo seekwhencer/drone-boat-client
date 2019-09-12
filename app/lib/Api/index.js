@@ -37,7 +37,7 @@ export default class Api extends Module {
 
                 APIAPP.use(formidable());
 
-                this.websocket = new Websocket(CONFIG.websocket);
+                //this.websocket = new Websocket(CONFIG.websocket);
 
                 // add the api routes
                 APIAPP.endpoints = {};
