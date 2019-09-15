@@ -52,7 +52,7 @@ export default class extends Module {
                 try{
                     MQTT.publish('network', {
                         clientId: client.id,
-                        state: 'connected',
+                        connected: 1,
                         timestamp: parseInt(Date.now() / 1000)
                     });
                 }catch(e){}
@@ -63,7 +63,7 @@ export default class extends Module {
                 try{
                     MQTT.publish('network', {
                         clientId: client.id,
-                        state: 'disconnected',
+                        connected: 0,
                         timestamp: parseInt(Date.now() / 1000)
                     });
                 }catch(e){}
