@@ -4,7 +4,6 @@ import redis from 'redis';
 import http from 'http';
 
 export default class extends Module {
-
     constructor(args) {
         super(args);
         return new Promise((resolve, reject) => {
@@ -49,24 +48,28 @@ export default class extends Module {
 
             this.engine.on('clientConnected', (client) => {
                 LOG(this.label, 'CLIENT CONNECTED:', client.id);
-                try{
+                try {
                     MQTT.publish('network', {
                         clientId: client.id,
                         connected: 1,
                         timestamp: parseInt(Date.now() / 1000)
                     });
-                }catch(e){}
+                } catch (e) {
+                    //..
+                }
             });
 
             this.engine.on('clientDisconnected', (client) => {
                 LOG(this.label, 'CLIENT DISCONNECTED:', client.id);
-                try{
+                try {
                     MQTT.publish('network', {
                         clientId: client.id,
                         connected: 0,
                         timestamp: parseInt(Date.now() / 1000)
                     });
-                }catch(e){}
+                } catch (e) {
+                    //..
+                }
             });
 
             this.engine.on('published', (packet, client) => {
@@ -99,5 +102,4 @@ export default class extends Module {
             LOG(broker.label, 'PUBLISHING ON TOPIC', topic, 'PAYLOAD', JSON.stringify(payload));
         });
     }
-
-};
+}

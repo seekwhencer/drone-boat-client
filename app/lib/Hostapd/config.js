@@ -37,4 +37,4 @@ export default class extends Module {
         });
         fs.writeFileSync(options.config_file, configFileData);
     }
-};
+}

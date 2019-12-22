@@ -70,12 +70,11 @@ export default class Api extends Module {
                 });
             }
         );
-    };
+    }
 
     shutdown() {
         this.http.close(() => {
             LOG(this.label, 'CLOSED');
         });
-    };
-
-};
+    }
+}

@@ -16,4 +16,4 @@ export default class extends Abstract {
             LOG(error);
         }
     }
-};
+}

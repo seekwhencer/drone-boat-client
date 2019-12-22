@@ -66,5 +66,4 @@ export default class extends Module {
     get item() {
         return this._item;
     }
-
-};
+}

@@ -12,6 +12,5 @@ export default class AppConfig {
         if(fs.existsSync(this.filePath))
             return ini.parse(fs.readFileSync(this.filePath, 'utf-8'));
 
-
     }
-};
+}

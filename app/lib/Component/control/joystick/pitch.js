@@ -5,4 +5,4 @@ export default class extends Axis {
         super(false, _options);
         this.name = 'pitch';
     }
-};
+}

@@ -6,4 +6,4 @@ export default class extends Axis {
         this.name = 'yaw';
         this.normalized = 0;
     }
-};
+}

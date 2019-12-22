@@ -53,9 +53,9 @@ export default class Joystick extends Module {
                 this.throttle.calculateSides();
                 this.throttle.publish();
                 this.button7.publish();
-            } catch (e) {}
-
-
+            } catch (e) {
+                //..
+            }
         });
 
         this.button1 = new Button('button1', this.options.buttons.button1);
@@ -125,5 +125,4 @@ export default class Joystick extends Module {
     publish() {
         this.throttle.publish();
     }
-
-};
+}

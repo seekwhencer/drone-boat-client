@@ -24,7 +24,5 @@ export default class Websocket extends Module {
         });
 
         APIAPP.use("/mqtt", this.router);
-
-
     }
-};
+}

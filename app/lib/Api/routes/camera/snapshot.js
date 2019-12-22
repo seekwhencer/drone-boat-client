@@ -18,4 +18,4 @@ export default class extends RouteSet {
 
         return this.router;
     }
-};
+}

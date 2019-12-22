@@ -53,5 +53,4 @@ export default class {
     get options() {
         return this._options;
     }
-
-};
+}

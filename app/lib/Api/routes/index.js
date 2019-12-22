@@ -4,4 +4,4 @@ import camera from './camera.js';
 export {
     home,
     camera
-};
+}

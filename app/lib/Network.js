@@ -5,10 +5,8 @@ import MqttClient from "./MqttClient/index.js";
 import Network from "./Network/index.js";
 
 export default class DroneBoat extends Module {
-
     constructor(args) {
         super(args);
-
         return new Promise((resolve, reject) => {
             this.label = 'DRONEBOAT';
             this.defaults = CONFIG.global;
@@ -33,4 +31,4 @@ export default class DroneBoat extends Module {
                 });
         });
     }
-};
+}

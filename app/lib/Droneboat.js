@@ -3,7 +3,6 @@ import Broker from './Broker/index.js';
 import Api from './Api/index.js';
 import MqttClient from './MqttClient/index.js';
 import Influx from './Influx/index.js';
-
 import Component from './Component/component.js';
 
 export default class DroneBoat extends Module {
@@ -41,7 +40,6 @@ export default class DroneBoat extends Module {
                     global.GPS = gps;
                     resolve(this);
                 })
-        });
+        })
     }
-
-};
+}

@@ -6,4 +6,4 @@ export default {
     Joystick,
     Flightstick,
     Gamepad
-};
+}

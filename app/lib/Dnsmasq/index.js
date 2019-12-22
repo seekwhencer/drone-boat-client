@@ -184,5 +184,4 @@ export default class extends Module {
 
         return found;
     }
-
-};
+}

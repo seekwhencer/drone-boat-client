@@ -20,4 +20,4 @@ export default class Log extends Module {
         ].concat(Array.from(arguments));
         console.log.apply(console, output);
     }
-};
+}

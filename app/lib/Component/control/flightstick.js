@@ -3,4 +3,4 @@ export default class extends Module {
     constructor(args) {
         super(args);
     }
-};
+}

@@ -21,7 +21,7 @@ export default class extends Module {
             LOG('');
             resolve(this);
         });
-    };
+    }
 
     message(topic, payload, clientId) {
         if (payload.toString().charAt(0) !== '{') // check if the payload is a json string
@@ -56,4 +56,4 @@ export default class extends Module {
                 LOG(this.label, 'ERROR WRITING DATABASE', JSON.stringify(point));
             });
     }
-};
+}

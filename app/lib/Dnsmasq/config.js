@@ -67,4 +67,4 @@ export default class extends Module {
         super.mergeOptions(args);
         this.options.config.server = this.options.config.server.split(',');
     }
-};
+}

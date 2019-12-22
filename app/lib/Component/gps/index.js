@@ -39,7 +39,9 @@ export default class extends Module {
         this.parser.on('data', line => {
             try {
                 this.gps.update(line);
-            } catch (e) {}
+            } catch (e) {
+                //..
+            }
         });
     }
 
@@ -97,4 +99,4 @@ export default class extends Module {
             }
         });
     }
-};
+}

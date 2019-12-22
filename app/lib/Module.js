@@ -26,7 +26,6 @@ export default class Module {
         } else {
             this.options = this.defaults;
         }
-
         this.options.id = this.id = `id${Crypto.createHash('md5').update(`${Date.now()}`).digest("hex")}`;
     }
 
@@ -98,7 +97,7 @@ export default class Module {
                 return true;
             }
         })[0];
-    };
+    }
 
     createFolder(folder) {
         if (!folder) {
@@ -109,5 +108,4 @@ export default class Module {
             LOG(this.label, 'FOLDER CREATED:', folder);
         }
     }
-
-};
+}

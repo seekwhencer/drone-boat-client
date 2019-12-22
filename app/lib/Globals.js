@@ -5,7 +5,6 @@ import Log from './Log.js';
 import Package from '../package.json';
 import Config from './Config.js';
 
-
 global.DEBUG = process.env.NODE_DEBUG || true;
 if (DEBUG === 'true') global.DEBUG = true;
 if (DEBUG === 'false') global.DEBUG = false;
@@ -23,7 +22,7 @@ process.on('SIGINT', () => {
     try{
         DNS.resetResolve();
     } catch(e){
-
+        //..
     }
 
     // some graceful exit code

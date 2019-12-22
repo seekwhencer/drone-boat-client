@@ -35,7 +35,7 @@ export default class RouteSet {
 
     set endpoint(value) {
         this._endpoint = value;
-    };
+    }
 
     addRoutes(Routes) {
         if (!this.parent) { // ony the first (root) route set has no parent
@@ -72,5 +72,5 @@ export default class RouteSet {
             // here the final url will be mapped to the created router elements
             APIAPP.routeset[this.url].push(APIAPP.use(this.url, router));
         });
-    };
-};
+    }
+}
