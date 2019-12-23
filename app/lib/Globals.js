@@ -8,8 +8,9 @@ import Config from './Config.js';
 global.DEBUG = process.env.NODE_DEBUG || true;
 if (DEBUG === 'true') global.DEBUG = true;
 if (DEBUG === 'false') global.DEBUG = false;
-
-global.LOG = new Log().log;
+const Logger = new Log();
+global.LOG = Logger.log;
+global.ERROR = Logger.error;
 
 /**
  * global process events

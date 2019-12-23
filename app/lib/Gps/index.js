@@ -1,4 +1,4 @@
-import Module from '../../Module.js';
+import Module from '../Module.js';
 import Gps from 'gps';
 import SerialPort from 'serialport';
 import Readline from '@serialport/parser-readline';
@@ -7,41 +7,47 @@ import {spawn} from 'child_process';
 export default class extends Module {
     constructor(args) {
         super(args);
-        this.label = 'GPS';
+        return new Promise((resolve,reject) => {
+            this.label = 'GPS';
 
-        LOG(this.label, 'INIT');
-        this.defaults = CONFIG.gps;
-        this.mergeOptions(args);
+            LOG(this.label, 'INIT');
+            this.defaults = CONFIG.gps;
+            this.mergeOptions(args);
 
-        this.process = {
-            baudrate: false
-        };
+            this.process = {
+                baudrate: false
+            };
 
-        this.lat = false;
-        this.lon = false;
-        this.time = false;
-        this.timestamp = false;
-        this.speed = false;
-        this.system_time_set = false;
+            this.lat = false;
+            this.lon = false;
+            this.time = false;
+            this.timestamp = false;
+            this.speed = false;
+            this.system_time_set = false;
 
-        this.setBaudrate();
+            this.setBaudrate();
 
-        this.gps = new Gps();
-        this.gps.on('data', () => {
-            this.mapState();
-        });
+            this.gps = new Gps();
+            this.gps.on('data', () => {
+                this.mapState();
+            });
 
-        this.port = new SerialPort(this.options.device, {
-            baudRate: parseInt(this.options.baudrate)
-        });
-        this.parser = new Readline();
-        this.port.pipe(this.parser);
-        this.parser.on('data', line => {
-            try {
-                this.gps.update(line);
-            } catch (e) {
-                //..
-            }
+            this.port = new SerialPort(this.options.device, {
+                baudRate: parseInt(this.options.baudrate)
+            });
+            this.parser = new Readline();
+            this.port.pipe(this.parser);
+            this.parser.on('data', line => {
+                if (this.options.tty === true)
+                    LOG(this.label, 'GOT DATA', line);
+
+                try {
+                    this.gps.update(line);
+                } catch (e) {
+                    ERROR(e);
+                }
+            });
+            resolve(this);
         });
     }
 

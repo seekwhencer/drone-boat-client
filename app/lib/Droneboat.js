@@ -3,6 +3,7 @@ import Broker from './Broker/index.js';
 import Api from './Api/index.js';
 import MqttClient from './MqttClient/index.js';
 import Influx from './Influx/index.js';
+import Gps from './Gps/index.js';
 import Component from './Component/component.js';
 
 export default class DroneBoat extends Module {
@@ -31,15 +32,12 @@ export default class DroneBoat extends Module {
                 })
                 .then(api => {
                     global.API = api;
-                    return new Component({
-                        type: 'Gps',
-                        options: 'mouse'
-                    });
+                    return new Gps();
                 })
                 .then(gps => {
                     global.GPS = gps;
                     resolve(this);
-                })
+                });
         })
     }
 }
