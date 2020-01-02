@@ -61,8 +61,7 @@ export default class Api extends Module {
                 LOG('');
 
                 // the frontend server
-                //APIAPP.use('/', EXPRESS.static(`${APP_DIR}/frontend/dist`));
-                //APIAPP.use('/snapshot', EXPRESS.static(`${APP_DIR}/../snapshots`));
+                this.useFrontend();
 
                 this.http = http.createServer(APIAPP);
                 this.http.listen(this.options.port, () => {
@@ -76,5 +75,10 @@ export default class Api extends Module {
         this.http.close(() => {
             LOG(this.label, 'CLOSED');
         });
+    }
+
+    useFrontend(){
+         APIAPP.use('/', EXPRESS.static(`${APP_DIR}/public`));
+        ['css','js','images'].forEach(i => APIAPP.use(`/${i}`, EXPRESS.static(`${APP_DIR}/../frontend/${i}`)));
     }
 }
