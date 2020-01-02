@@ -38,7 +38,7 @@ export default class extends Module {
             this.parser = new Readline();
             this.port.pipe(this.parser);
             this.parser.on('data', line => {
-                if (this.options.tty === true)
+                if (this.options.tty_data === true)
                     LOG(this.label, 'GOT DATA', line);
 
                 try {
