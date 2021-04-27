@@ -29,7 +29,7 @@
     "mqtt": "^3.0.0",
     "pino": "^5.15.0",
     "ramda": "^0.26.1",
-    "redis": "^2.8.0",
+    "redis": "^3.1.1",
     "serialport": "^7.1.5"
   },
   "devDependencies": {
