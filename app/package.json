@@ -17,7 +17,7 @@
   "license": "ISC",
   "dependencies": {
     "dateformat": "^3.0.3",
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "express-formidable": "^1.2.0",
     "express-ws": "^4.0.0",
     "formidable": "^1.2.1",
